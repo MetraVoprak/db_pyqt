@@ -1,0 +1,6 @@
+2022-11-18 17:03:25,057 DEBUG decos.py Была вызвана функция process_response_ans c параметрами ({'response': 200},) , {}. Вызов из модуля client
+2022-11-18 17:03:25,057 DEBUG decos.py Была вызвана функция process_response_ans c параметрами ({'response': 400, 'error': 'Bad Request'},) , {}. Вызов из модуля client
+2022-11-18 17:03:25,057 DEBUG decos.py Была вызвана функция create_presence c параметрами ('Guest',) , {}. Вызов из модуля client
+2022-11-18 17:03:25,058 DEBUG decos.py Была вызвана функция process_response_ans c параметрами ({'error': 'Bad Request'},) , {}. Вызов из модуля client
+2022-11-18 17:03:32,331 DEBUG decos.py Была вызвана функция send_message c параметрами (<test_utils.TestSocket object at 0x1037460a0>, {'action': 'presence', 'time': 111111.111111, 'user': {'account_name': 'test_test'}}) , {}. Вызов из модуля common.utils
+2022-11-18 17:03:32,331 DEBUG decos.py Была вызвана функция send_message c параметрами (<test_utils.TestSocket object at 0x1037460a0>, 1111) , {}. Вызов из модуля common.utils
