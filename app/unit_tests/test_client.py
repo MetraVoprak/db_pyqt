@@ -1,7 +1,11 @@
 import sys
-sys.path.append('../')
+import os
+
+from db_pyqt.app.common.variables import *
+
+sys.path.append(os.path.join(os.getcwd(), '..'))
 from client import create_presence, process_response_ans
-from common.variables import *
+
 import unittest
 from errors import ReqFieldMissingError, ServerError
 

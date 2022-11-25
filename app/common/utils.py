@@ -1,10 +1,8 @@
-from variables import *
-import json
+from db_pyqt.app.common.variables import *
 import sys
 sys.path.append('../')
 from errors import IncorrectDataRecivedError, NonDictInputError
-import sys
-sys.path.append('../')
+import json
 from decos import log
 
 

@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append('../')
 import logging
-from common.variables import LOGGING_LEVEL
+from db_pyqt.app.common.variables import *
 
 # создаём формировщик логов (formatter):
 client_formatter = logging.Formatter('%(asctime)s %(levelname)s %(filename)s %(message)s')

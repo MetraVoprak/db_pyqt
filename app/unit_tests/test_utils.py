@@ -1,7 +1,10 @@
+import json
 import sys
+
 sys.path.append('../')
-from common.utils import *
-from common.variables import *
+from db_pyqt.app.common.variables import *
+from db_pyqt.app.common.utils import *
+
 import unittest
 from errors import NonDictInputError
 
