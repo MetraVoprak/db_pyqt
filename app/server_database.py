@@ -248,9 +248,9 @@ if __name__ == '__main__':
     print(f'История входов пользователя {username_1}')
     [print(f'\t{username}: {ip}:{port}, {time}') for username, ip, port, time in server_db.login_history(username_1)]
     print(server_db.users_list())
-    server_db.user_change_name(username_1, 'Anatolii')
+    server_db.user_change_name(username_1, 'Artem')
     print(server_db.get_user(username_1))
-    server_db.user_change_name(username_1, last_name='Tsirkunenko')
+    server_db.user_change_name(username_1, last_name='Karpov')
     print(server_db.get_user(username_1))
 
     server_db.add_contact(username_1, username_2)
