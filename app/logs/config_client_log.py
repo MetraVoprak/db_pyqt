@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append('../')
 import logging
-from db_pyqt.app.common.variables import *
+from common.variables import LOGGING_LEVEL
 
 # создаём формировщик логов (formatter):
 client_formatter = logging.Formatter('%(asctime)s %(levelname)s %(filename)s %(message)s')
@@ -14,7 +14,7 @@ path = os.path.join(path, 'client.log')
 # создаём потоки вывода логов
 steam = logging.StreamHandler(sys.stderr)
 steam.setFormatter(client_formatter)
-steam.setLevel(logging.ERROR)
+steam.setLevel(logging.INFO)
 log_file = logging.FileHandler(path, encoding='utf8')
 log_file.setFormatter(client_formatter)
 

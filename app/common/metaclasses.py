@@ -4,7 +4,7 @@ import socket
 
 class ClientMaker(type):
     def __new__(cls, name, bases, dct):
-        # Проверьте все экземпляры при создании класса и выдайте ошибку, если они относятся к экземпляру сокета.
+        # Check all instances at class creation and throw error if the are of socket instance
         for key, value in dct.items():
             if not hasattr(value, '__call__'):
                 if isinstance(value, socket.socket):
@@ -19,31 +19,30 @@ class ClientMaker(type):
         class_attrs = []
         found_com_fcn = False
 
-        # Получить методы класса
+        # Get class methods
         for key, value in dct.items():
             if hasattr(value, '__call__'):
                 class_methods.update({key: value})
 
-        # Получить атрибуты класса
+        # Get class attributes
         for instruction in dis.get_instructions(dct['__init__']):
             if instruction.opname == 'STORE_ATTR':
                 class_attrs.append(getattr(instruction, 'argval'))
 
-        # Проверьте, есть ли у клиента определение сокета в его инициализации.
+        # Check if client has a socket definition in its init
         if not [class_attr for class_attr in class_attrs if class_attr in sock_alias]:
             raise ValueError(f'У клиента должен быть сокет!')
 
-        # Проверьте каждый метод класса и проверьте, вызывался ли сокет с функциями приема или прослушивания.
+        # Check each class method and check whether socket was called with accept or listen functions
         for class_method in class_methods.values():
             instructions = dis.get_instructions(class_method)
             sock_found = False
             for instruction in instructions:
-                # Установите флаг, если используется какая-либо из функций связи
+                # Set a flag if any of communication functions is used
                 if instruction.opname == 'LOAD_GLOBAL':
                     if instruction.argval in com_fcn:
                         found_com_fcn = True
-                # Если вызов метода происходит сразу после загрузки сокета, а метод принимает
-                # или слушает - выдает ошибку
+                # If method call goes right after the socket load and method is accept or listen - throw an error
                 if sock_found:
                     if instruction.opname == 'LOAD_METHOD':
                         instruction_cmd = instruction.argval
@@ -53,7 +52,7 @@ class ClientMaker(type):
                     sock_found = False
                 if instruction.opname == 'LOAD_ATTR' and instruction.argval in sock_alias:
                     sock_found = True
-        # Проверьте, присутствует ли один из двух способов связи
+        # Check if one of the 2 communication methods is present
         if not found_com_fcn:
             raise ValueError(f'Отсутствуют вызовы функций, работающих с сокетами')
         type.__init__(cls, name, bases, dct)
@@ -75,22 +74,22 @@ class ServerMaker(type):
         class_methods = {}
         found_com_fcn = False
 
-        # Получить методы класса
+        # Get class methods
         for key, value in dct.items():
             if hasattr(value, '__call__'):
                 class_methods.update({key: value})
 
-        # Проверяет каждый метод класса и проверьте, вызывался ли сокет с функциями приема или прослушивания.
+        # Check each class method and check whether socket was called with accept or listen functions
         for class_method in class_methods.values():
             instructions = dis.get_instructions(class_method)
             sock_found = False
             sock_arg_counter = 0
             for instruction in instructions:
-                # Установика флаг, если используется какая-либо из функций связи
+                # Set a flag if any of communication functions is used
                 if instruction.opname == 'LOAD_GLOBAL':
                     if instruction.argval in com_fcn:
                         found_com_fcn = True
-                # Если вызов метода идет сразу после загрузки сокета и метод подключается - выдает ошибку
+                # If method call goes right after the socket load and method is connect - throw an error
                 if sock_found:
                     if instruction.opname == 'LOAD_METHOD':
                         instruction_cmd = instruction.argval
@@ -98,9 +97,9 @@ class ServerMaker(type):
                             raise TypeError(f'Использование метода {instruction_cmd} у сокета '
                                             f'недопустимо в классе {name}')
                         if instruction_cmd == 'socket':
-                            sock_arg_counter += 2  # Ожидание получения двух атрибутов от этой функции
+                            sock_arg_counter += 2  # Waiting for two attributes to come from this function
                     sock_found = False
-                # Если сокет был создан - проверьте 2 его аргумента, оба должны быть в конфигурации TCP
+                # If socket was created - check 2 of its arguments, both should be in TCP config
                 if sock_arg_counter:
                     if instruction.opname == 'LOAD_ATTR':
                         sock_arg_counter -= 1
@@ -108,10 +107,10 @@ class ServerMaker(type):
                             raise TypeError(f'Использование {instruction.argval} у сокета недопустимо для работы по TCP'
                                             f' в классе {name}')
                     elif instruction.opname == 'CALL_METHOD':
-                        sock_arg_counter = 0  # Метод был вызван до того, как были загружены ожидаемые аргументы
+                        sock_arg_counter = 0  # Method was called before expected arguments were loaded
                 if instruction.opname == 'LOAD_ATTR' and instruction.argval in sock_alias:
                     sock_found = True
-        # Проверьте, присутствует ли один из двух способов связи
+        # Check if one of the 2 communication methods is present
         if not found_com_fcn:
             raise ValueError(f'Отсутствуют вызовы функций, работающих с сокетами')
         type.__init__(cls, name, bases, dct)
