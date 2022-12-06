@@ -1,9 +1,12 @@
 from PyQt5.QtWidgets import QDialog, QPushButton, QLineEdit, QApplication, QLabel, qApp
-from PyQt5.QtCore import QEvent
 
 
-# Стартовый диалог с выбором имени пользователя
 class UserNameDialog(QDialog):
+    """
+    Класс реализующий стартовый диалог с запросом логина и пароля
+    пользователя.
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -74,7 +77,8 @@ QLineEdit
 QPushButton
 {
     color: #b1b1b1;
-    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #565656, stop: 0.1 #525252, stop: 0.5 #4e4e4e, stop: 0.9 #4a4a4a, stop: 1 #464646);
+    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #565656, stop: 0.1 #525252, stop: 0.5 #4e4e4e
+    , stop: 0.9 #4a4a4a, stop: 1 #464646);
     border-width: 1px;
     border-color: #1e1e1e;
     border-style: solid;
@@ -88,15 +92,16 @@ QPushButton
 
 QPushButton:pressed
 {
-    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2d2d2d, stop: 0.1 #2b2b2b, stop: 0.5 #292929, stop: 0.9 #282828, stop: 1 #252525);
+    background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2d2d2d, stop: 0.1 #2b2b2b, stop: 0.5 #292929
+    , stop: 0.9 #282828, stop: 1 #252525);
 }
             """
         )
 
         self.show()
 
-    # Обработчик кнопки ОК, если поле вводе не пустое, ставим флаг и завершаем приложение.
     def click(self):
+        """Метод обработчик кнопки ОК."""
         if self.client_name.text() and self.client_passwd.text():
             self.ok_pressed = True
             qApp.exit()
